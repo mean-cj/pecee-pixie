@@ -358,7 +358,7 @@ abstract class BaseAdapter
     {
         $this->aliasPrefix = $statements['aliases'][$table] ?? null;
         if ($this->aliasPrefix !== null) {
-            return sprintf('%s AS %s', $this->wrapSanitizer($table), $this->wrapSanitizer(strtolower($this->aliasPrefix)));
+            return sprintf('%s AS %s', $this->wrapSanitizer($table), $this->wrapSanitizer($this->aliasPrefix));
         }
 
         return sprintf('%s', $this->wrapSanitizer($table));
