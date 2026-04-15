@@ -493,7 +493,7 @@ abstract class BaseAdapter
 
             if ($value instanceof Raw) {
                 $statements[] = $statement . $value;
-                $bindings += $value->getBindings();
+                $bindings = array_merge($bindings, (array)$value->getBindings()); // fixed
             } else {
                 $statements[] = $statement . '?';
                 $bindings[] = $value;
