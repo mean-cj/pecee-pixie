@@ -443,7 +443,7 @@ abstract class BaseAdapter
             $keys[] = $key;
             if ($value instanceof Raw) {
                 $values[] = (string)$value;
-                $bindings[] = $value->getBindings();
+                $bindings = array_merge($bindings, (array)$value->getBindings());  // ✅ FIXED
             } else {
                 $values[] = '?';
                 $bindings[] = $value;
