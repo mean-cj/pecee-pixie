@@ -186,11 +186,23 @@ abstract class BaseAdapter
                 // Get the criteria only query from the nestedCriteria object
                 $queryObject = $nestedCriteria->getQuery('criteriaOnly', true);
 
+                // Skip if the closure didn't add any criteria (empty closure)
+                $sql = $queryObject->getSql();
+                if (trim($sql) === '')
+                {
+                    // Remove the joiner (AND/OR) that was already pushed before the closure check
+                    if ($joiner !== '')
+                    {
+                        array_pop($criteria);
+                    }
+                    continue;
+                }
+
                 // Merge the bindings we get from nestedCriteria object
                 $bindings[] = $queryObject->getBindings();
 
                 // Append the sql we get from the nestedCriteria object
-                $criteria[] = "({$queryObject->getSql()})";
+                $criteria[] = "({$sql})";
 
                 continue;
             }
@@ -375,7 +387,8 @@ abstract class BaseAdapter
      */
     public function criteriaOnly(array $statements, $bindValues = true): array
     {
-        $sql = $bindings = [];
+        $sql = '';
+        $bindings = [];
         if (isset($statements['criteria']) === false) {
             return compact('sql', 'bindings');
         }
